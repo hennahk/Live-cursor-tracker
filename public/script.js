@@ -1,7 +1,9 @@
 const socket = io();
 const cursors = {};
 
-let lastsend = 0;
+const box = document.getElementById("box");
+
+let lastsent = 0;
 const throttle = 50;
 
 document.addEventListener("mousemove", (e) => {
@@ -14,6 +16,17 @@ document.addEventListener("mousemove", (e) => {
 		x: e.clientX,
 		y: e.clientY
 	});
+});
+
+let dragging = false;
+
+box.addEventListener("mousedown", () => dragging = true);
+document.addEventListener("mouseup", () => dragging = false);
+
+document.addEventListener("mousemove",(e) => {
+	if(!dragging) return;
+	box.style.left = e.clientX + "px";
+	box.style.top = e.clientY + "px";
 });
 
 socket.on("cursor-update", ({ id, x, y }) => {
